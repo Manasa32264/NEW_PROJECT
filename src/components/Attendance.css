@@ -1,7 +1,19 @@
+:root {
+  --white: white;
+  --beige: #fbf9f1;
+  --accent: #f4b30c;
+  --black: black;
+  --brown: #1a1200;
+  --beige-footer: #ddd9c5;
+}
+
 .attendance-container {
-  max-width: 1200px;
-  margin: 0 auto;
+  background: var(--beige);
+  border-radius: 12px;
   padding: 20px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  max-width: 1200px;
+  margin: 30px auto;
 }
 
 .attendance-header {
@@ -15,6 +27,16 @@
   font-size: 28px;
   margin: 0;
   color: var(--brown);
+}
+/* Update buttons */
+.btn, .btn-add, .btn-present, .btn-absent, .back-btn {
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s;
+}
+
+.btn:hover, .btn-add:hover, .btn-present:hover, .btn-absent:hover, .back-btn:hover {
+  filter: brightness(1.1);
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
 .back-btn {
@@ -41,20 +63,22 @@
 
 .stat-card {
   background: var(--white);
-  padding: 20px;
-  border-radius: 12px;
-  border: 1px solid rgba(0,0,0,0.08);
-  text-align: center;
+  border-radius: 14px;
+  padding: 30px 20px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.07);
+  color: var(--brown);
 }
 
 .stat-card.good {
   background: linear-gradient(135deg, #f0fdf4, #dcfce7);
-  border-color: #059669;
+  border-color: var(--accent);
+  color: #065f46;
 }
 
 .stat-card.warning {
-  background: linear-gradient(135deg, #fef2f2, #fee2e2);
+  background: linear-gradient(135deg, #ffebeb, #fbcaca);
   border-color: #dc2626;
+  color: #991b1b;
 }
 
 .stat-card h3 {
@@ -154,17 +178,18 @@
   gap: 16px;
 }
 
+/* Subject cards */
 .subject-card {
   background: var(--white);
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 12px;
-  padding: 20px;
-  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  border-radius: 14px;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
 }
 
 .subject-card:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(0,0,0,0.12);
+  transform: translateY(-4px);
 }
 
 .subject-header {
@@ -304,11 +329,12 @@
 }
 
 /* Tips Section */
-.tips-section {
-  background: var(--white);
-  padding: 20px;
-  border-radius: 12px;
-  border: 1px solid rgba(0,0,0,0.08);
+.t.tips-section {
+  background: var(--beige-footer);
+  border-radius: 16px;
+  padding: 25px 30px;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.03);
+  margin-top: 40px;
 }
 
 .tips-section h3 {
@@ -323,17 +349,24 @@
 }
 
 .tip {
-  background: var(--beige);
-  padding: 12px;
-  border-radius: 6px;
-  font-size: 14px;
-  line-height: 1.4;
+  font-size: 16px;
+  padding: 12px 0;
+  color: var(--brown);
 }
 
+/* Responsive font sizes */
 @media (max-width: 768px) {
-  .overall-stats {
-    grid-template-columns: 1fr;
+  .attendance-title {
+    font-size: 24px;
+    text-align: center;
   }
+  .subject-card, .stat-card {
+    padding: 20px;
+  }
+  .tips-section {
+    padding: 20px;
+  }
+
   
   .subjects-grid {
     grid-template-columns: 1fr;
