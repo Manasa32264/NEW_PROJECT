@@ -1,0 +1,268 @@
+.grade-predictor-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.grade-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.grade-title {
+  font-size: 28px;
+  margin: 0;
+  color: var(--brown);
+}
+
+.back-btn {
+  background: var(--white);
+  border: 1px solid rgba(0,0,0,0.12);
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.back-btn:hover {
+  background: var(--beige);
+  transform: translateY(-1px);
+}
+
+.grade-content {
+  display: grid;
+  gap: 24px;
+}
+
+/* CIE Section */
+.cie-section {
+  background: var(--white);
+  padding: 24px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+.cie-section h3 {
+  margin: 0 0 20px 0;
+  color: var(--brown);
+  font-size: 20px;
+}
+
+.cie-inputs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--brown);
+  font-size: 14px;
+}
+
+.grade-input {
+  padding: 12px;
+  border: 2px solid rgba(0,0,0,0.1);
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.2s;
+}
+
+.grade-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.cie-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  padding: 16px;
+  background: var(--beige);
+  border-radius: 8px;
+}
+
+.summary-item {
+  text-align: center;
+  font-weight: 600;
+}
+
+.best-possible {
+  color: var(--accent);
+  font-size: 18px;
+}
+
+/* Results Section */
+.results-section {
+  background: var(--white);
+  padding: 24px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+.results-section h3 {
+  margin: 0 0 20px 0;
+  color: var(--brown);
+  font-size: 20px;
+}
+
+.grade-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.grade-card {
+  background: var(--white);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-left: 4px solid var(--accent);
+  border-radius: 8px;
+  padding: 16px;
+  transition: all 0.2s;
+}
+
+.grade-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transform: translateY(-1px);
+}
+
+.grade-card.achievable {
+  background: #f0fdf4;
+  border-color: #059669;
+}
+
+.grade-card.not-achievable {
+  background: #fef2f2;
+  border-color: #dc2626;
+  opacity: 0.7;
+}
+
+.grade-header-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.grade-letter {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.grade-range {
+  font-size: 12px;
+  color: rgba(0,0,0,0.6);
+}
+
+.grade-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.see-requirement {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.see-score {
+  font-weight: 700;
+  color: var(--brown);
+}
+
+.see-percentage {
+  font-size: 12px;
+  color: rgba(0,0,0,0.6);
+}
+
+.easy-target {
+  color: #059669;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.moderate-target {
+  color: #d97706;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.hard-target {
+  color: #dc2626;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.not-achievable-note {
+  color: #dc2626;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+/* Tips Section */
+.tips-section {
+  background: var(--white);
+  padding: 24px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+.tips-section h3 {
+  margin: 0 0 20px 0;
+  color: var(--brown);
+  font-size: 20px;
+}
+
+.tips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+.tip-card {
+  background: var(--beige);
+  padding: 16px;
+  border-radius: 8px;
+  border-left: 4px solid var(--accent);
+}
+
+.tip-card h4 {
+  margin: 0 0 8px 0;
+  color: var(--brown);
+  font-size: 16px;
+}
+
+.tip-card p {
+  margin: 0;
+  color: rgba(0,0,0,0.7);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .cie-inputs {
+    grid-template-columns: 1fr;
+  }
+  
+  .grade-results {
+    grid-template-columns: 1fr;
+  }
+  
+  .tips-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .cie-summary {
+    grid-template-columns: 1fr;
+  }
+}

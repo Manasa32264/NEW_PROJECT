@@ -1,0 +1,274 @@
+.container.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  min-height: 80vh;
+  width: 100vw;
+  max-width: 100vw;
+  margin-inline: 0;
+  padding-left: 2vw;
+  padding-right: 2vw;
+  position: relative;
+}
+
+
+.left-half {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 3rem;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+.title {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 900;
+  font-size: clamp(120px, 20vw, 220px);
+  line-height: 1.1;
+  margin: 0 0 40px;
+  text-align: left;
+  color: var(--brown);
+  text-transform: uppercase;
+  letter-spacing: -4px;
+  user-select: none;
+}
+
+.title-main {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.title-sub {
+  display: block;
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  color: var(--accent);
+  margin-left: 40px;
+  margin-top: -30px;
+  transform: rotate(-2deg);
+  user-select: none;
+  letter-spacing: 0.18em;
+}
+
+.subtitle {
+  max-width: 720px;
+  font-size: clamp(24px, 3vw, 30px);
+  font-weight: 500;
+  line-height: 1.5;
+  margin-top: 20px;
+  color: rgba(26, 18, 0, 0.75);
+  user-select: none;
+}
+
+.right-half {
+  width: 50%;
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: visible;
+}
+
+.track-container {
+  position: relative;
+  width: 480px;
+  height: 480px;
+
+  /* Animate rotation from -90deg to 0 deg (from left side) */
+  animation: circularArrival 3s ease forwards;
+}
+
+/* Tab base styling */
+.cute-tab {
+  position: absolute;
+  width: 220px;
+  height: 260px; /* taller to fit descriptions */
+  margin: 10px;
+  background: #f3f3f3;
+  border-radius: 30px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  cursor: pointer;
+  user-select: none;
+  padding: 1rem 1.2rem;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.cute-tab:hover {
+  background: #ffe953;
+  transform: scale(1.2);
+  z-index: 10;
+}
+
+.tab-icon {
+  font-size: 3rem;
+  margin-bottom: 0.4rem;
+}
+
+.tab-title {
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin-bottom: 0.3rem;
+  color: var(--brown);
+  user-select: none;
+}
+
+.tab-desc {
+  font-size: 1rem;
+  color: rgba(26, 18, 0, 0.7);
+  text-align: center;
+  line-height: 1.3;
+  user-select: none;
+}
+
+
+/* Circular position - dynamically rotated by animation */
+.tab1 {
+  top: 50%;
+  left: 50%;
+   transform: translate(-50%, -50%) rotate(0deg) translateX(200px) rotate(0deg);
+  transform-origin: center center;
+  animation: tabOrbit1 3s ease forwards;
+}
+
+.tab2 {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(120deg) translateX(200px) rotate(-120deg);
+  transform-origin: center center;
+  animation: tabOrbit2 3s ease forwards;
+}
+
+.tab3 {
+  top: 50%;
+  left: 50%;
+    transform: translate(-50%, -50%) rotate(240deg) translateX(200px) rotate(-240deg);
+
+  transform-origin: center center;
+  animation: tabOrbit3 3s ease forwards;
+}
+
+/* Animations for each tab to follow circular arrival path */
+
+@keyframes tabOrbit1 {
+  0% {
+    transform: translate(-50%, -50%) rotate(-90deg) translateX(200px) rotate(90deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(0deg) translateX(-200deg) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes tabOrbit2 {
+  0% {
+    transform: translate(-50%, -50%) rotate(30deg) translateX(240px) rotate(-30deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(120deg) translateX(200px) rotate(-120deg);
+    opacity: 1;
+  }
+}
+
+@keyframes tabOrbit3 {
+  0% {
+    transform: translate(-50%, -50%) rotate(150deg) translateX(200px) rotate(-150deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(240deg) translateX(200px) rotate(-240deg);
+    opacity: 1;
+  }
+}
+
+
+/* Responsive */
+@media (max-width: 767px) {
+  .container.hero {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    min-height: auto;
+  }
+
+  .title {
+    font-size: clamp(50px, 12vw, 100px);
+    text-align: center;
+  }
+
+  .title-sub {
+    margin-left: 0;
+    transform: rotate(0deg);
+    text-align: center;
+    font-size: 1.8rem;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 18px;
+    max-width: 100%;
+  }
+
+  .right-half {
+    height: 300px;
+  }
+
+  .cute-tab {
+    width: 120px;
+    height: 120px;
+    font-size: 1.4rem;
+  }
+}
+@media (max-width: 1024px) {
+  .container.hero { gap: 30px; }
+  .left-half { padding-left: 1.5rem; }
+  .track-container { width: 350px; height: 350px; }
+  .cute-tab { width: 140px; height: 140px; font-size: 1.6rem; }
+  .tab1, .tab2, .tab3 {
+    /* override circular translate for new radius */
+  }
+  @keyframes tabOrbit1 {
+    0% { transform: translate(-50%, -50%) rotate(-90deg) translateX(110px) rotate(90deg); opacity: 0; }
+    100% { transform: translate(-50%, -50%) rotate(0deg) translateX(110px) rotate(0deg); opacity: 1;}
+  }
+  @keyframes tabOrbit2 {
+    0% { transform: translate(-50%, -50%) rotate(30deg) translateX(110px) rotate(-30deg); opacity: 0;}
+    100% { transform: translate(-50%, -50%) rotate(120deg) translateX(110px) rotate(-120deg); opacity: 1;}
+  }
+  @keyframes tabOrbit3 {
+    0% { transform: translate(-50%, -50%) rotate(150deg) translateX(110px) rotate(-150deg); opacity: 0;}
+    100% { transform: translate(-50%, -50%) rotate(240deg) translateX(110px) rotate(-240deg); opacity: 1;}
+  }
+}
+@media (max-width: 767px) {
+  .container.hero { grid-template-columns: 1fr; gap: 20px; min-height: auto;}
+  .left-half { width: 100%; padding-left: 0; min-height: unset;}
+  .title { font-size: clamp(38px, 12vw, 64px); text-align: center; }
+  .title-sub { margin-left: 0; transform: rotate(0deg); text-align: center; font-size: 1.1rem;}
+  .subtitle { text-align: center; font-size: 15px; max-width: 100%; }
+  .right-half { width: 100%; height: 220px; }
+  .track-container { width: 180px; height: 180px; }
+  .cute-tab { width: 70px; height: 70px; font-size: 0.9rem; }
+  @keyframes tabOrbit1 {
+    0% { transform: translate(-50%, -50%) rotate(-90deg) translateX(48px) rotate(90deg); opacity: 0; }
+    100% { transform: translate(-50%, -50%) rotate(0deg) translateX(48px) rotate(0deg); opacity: 1;}
+  }
+  @keyframes tabOrbit2 {
+    0% { transform: translate(-50%, -50%) rotate(30deg) translateX(48px) rotate(-30deg); opacity: 0;}
+    100% { transform: translate(-50%, -50%) rotate(120deg) translateX(48px) rotate(-120deg); opacity: 1;}
+  }
+  @keyframes tabOrbit3 {
+    0% { transform: translate(-50%, -50%) rotate(150deg) translateX(48px) rotate(-150deg); opacity: 0;}
+    100% { transform: translate(-50%, -50%) rotate(240deg) translateX(48px) rotate(-240deg); opacity: 1;}
+  }
+}
