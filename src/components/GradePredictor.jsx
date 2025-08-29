@@ -9,12 +9,12 @@ const GradePredictor = ({ onBack }) => {
   // Grade bands as specified
   const gradeBands = [
     { grade: 'S', min: 90, max: 100, color: '#059669' },
-    { grade: 'A', min: 80, max: 89, color: '#0891b2' },
-    { grade: 'B', min: 70, max: 79, color: '#7c3aed' },
-    { grade: 'C', min: 65, max: 69, color: '#dc2626' },
-    { grade: 'D', min: 55, max: 64, color: '#ea580c' },
-    { grade: 'E', min: 45, max: 54, color: '#ca8a04' },
-    { grade: 'F', min: 0, max: 44, color: '#6b7280' }
+    { grade: 'A', min: 75, max: 89, color: '#0891b2' },
+    { grade: 'B', min: 66, max: 74, color: '#7c3aed' },
+    { grade: 'C', min: 56, max: 65, color: '#dc2626' },
+    { grade: 'D', min: 50, max: 55, color: '#ea580c' },
+    { grade: 'E', min: 45, max: 49, color: '#ca8a04' },
+    { grade: 'F', min: 0, max: 45, color: '#6b7280' }
   ]
 
   const calculations = useMemo(() => {
@@ -61,31 +61,31 @@ const GradePredictor = ({ onBack }) => {
           <h3>Enter your CIE Marks</h3>
           <div className="cie-inputs">
             <div className="input-group">
-              <label className="input-label">CIE 1 (Out of 20)</label>
+              <label className="input-label">CIE 1 (Out of 30)</label>
+              <input
+                type="number"
+                min="0"
+                max="30"
+                value={cie1}
+                onChange={(e) => setCie1(Math.min(30, Math.max(0, Number(e.target.value))))}
+                className="grade-input"
+              />
+            </div>
+            
+            <div className="input-group">
+              <label className="input-label">Event 1 (Out of 20)</label>
               <input
                 type="number"
                 min="0"
                 max="20"
-                value={cie1}
-                onChange={(e) => setCie1(Math.min(20, Math.max(0, Number(e.target.value))))}
+                value={cie2}
+                onChange={(e) => setCie2(Math.min(20, Math.max(0, Number(e.target.value))))}
                 className="grade-input"
               />
             </div>
             
             <div className="input-group">
               <label className="input-label">CIE 2 (Out of 30)</label>
-              <input
-                type="number"
-                min="0"
-                max="30"
-                value={cie2}
-                onChange={(e) => setCie2(Math.min(30, Math.max(0, Number(e.target.value))))}
-                className="grade-input"
-              />
-            </div>
-            
-            <div className="input-group">
-              <label className="input-label">CIE 3 (Out of 30)</label>
               <input
                 type="number"
                 min="0"
@@ -130,15 +130,18 @@ const GradePredictor = ({ onBack }) => {
                 </div>
                 
                 <div className="grade-details">
-                  <div className="see-requirement">
-                    <strong>SEE Required:</strong>
-                    <span className="see-score">
-                      {result.seeNeeded.toFixed(1)}/60
-                    </span>
-                    <span className="see-percentage">
-                      ({result.seeNeededOutOf100.toFixed(1)}%)
-                    </span>
-                  </div>
+                 <div className="see-requirement">
+                  <strong>SEE Required:</strong>
+                  <span className="see-score">
+                    {result.seeNeeded.toFixed(1)}/60
+                  </span>
+                  <span className="see-score-100">
+                    &nbsp;| {result.seeNeededOutOf100.toFixed(1)}/100
+                  </span>
+                  <span className="see-percentage">
+                    ({result.seeNeededOutOf100.toFixed(1)}%)
+                  </span>
+                </div>
                   
                   {!result.achievable && (
                     <div className="not-achievable-note">

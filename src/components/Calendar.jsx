@@ -105,6 +105,8 @@ const Calendar = ({ onBack }) => {
             <option value="exam">Exam</option>
             <option value="assignment">Assignment</option>
             <option value="fee">Fee Due</option>
+            <option value="other">Other</option>
+
           </select>
           <button onClick={addEvent} className="btn btn-add">Add Event</button>
         </div>

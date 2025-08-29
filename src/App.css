@@ -89,7 +89,7 @@
   width: 220px;
   height: 260px; /* taller to fit descriptions */
   margin: 10px;
-  background: #f3f3f3;
+  background:#fbf9f1;
   border-radius: 30px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.15);
   display: flex;
@@ -104,7 +104,7 @@
 }
 
 .cute-tab:hover {
-  background: #ffe953;
+  background:#f4b30c;
   transform: scale(1.2);
   z-index: 10;
 }
