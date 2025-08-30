@@ -1,96 +1,184 @@
 import React, { useState, useEffect } from 'react'
-import './Attendance.css'
+import './AttendanceTracker.css'
 
-const Attendance = ({ onBack }) => {
-  const [subjects, setSubjects] = useState([
-    { id: 1, name: 'Mathematics', attended: 0, total: 0 },
-    { id: 2, name: 'Physics', attended: 0, total: 0 },
-    { id: 3, name: 'Chemistry', attended: 0, total: 0 },
-    { id: 4, name: 'Computer Science', attended: 0, total: 0 }
-  ])
-  
-  const [newSubject, setNewSubject] = useState('')
+const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+
+const AttendanceTracker = ({ onBack }) => {
+  const [timetable, setTimetable] = useState([])
+  const [sessions, setSessions] = useState([])
   const [targetAttendance, setTargetAttendance] = useState(75)
+  const [manualDay, setManualDay] = useState('')
+  const [manualSubject, setManualSubject] = useState('')
+  const [showTimetable, setShowTimetable] = useState(true)
+  const [showExtraOptions, setShowExtraOptions] = useState({})
+  const [selectedDates, setSelectedDates] = useState({})
 
-  // Load data from localStorage on component mount
   useEffect(() => {
-    const savedData = localStorage.getItem('academate-attendance')
-    if (savedData) {
-      const { subjects: savedSubjects, target } = JSON.parse(savedData)
-      setSubjects(savedSubjects)
-      setTargetAttendance(target || 75)
-    }
+    const savedTimetable = localStorage.getItem('timetable')
+    const savedSessions = localStorage.getItem('sessions')
+    const savedTarget = localStorage.getItem('targetAttendance')
+    const savedSelectedDates = localStorage.getItem('selectedDates')
+    
+    if (savedTimetable) setTimetable(JSON.parse(savedTimetable))
+    if (savedSessions) setSessions(JSON.parse(savedSessions))
+    if (savedTarget) setTargetAttendance(parseInt(savedTarget))
+    if (savedSelectedDates) setSelectedDates(JSON.parse(savedSelectedDates))
   }, [])
 
-  // Save data to localStorage whenever subjects or target changes
   useEffect(() => {
-    localStorage.setItem('academate-attendance', JSON.stringify({
-      subjects,
-      target: targetAttendance
-    }))
-  }, [subjects, targetAttendance])
+    localStorage.setItem('timetable', JSON.stringify(timetable))
+  }, [timetable])
 
-  const addSubject = () => {
-    if (newSubject.trim()) {
-      setSubjects([...subjects, {
-        id: Date.now(),
-        name: newSubject.trim(),
-        attended: 0,
-        total: 0
-      }])
-      setNewSubject('')
+  useEffect(() => {
+    localStorage.setItem('sessions', JSON.stringify(sessions))
+  }, [sessions])
+
+  useEffect(() => {
+    localStorage.setItem('targetAttendance', targetAttendance.toString())
+  }, [targetAttendance])
+
+  useEffect(() => {
+    localStorage.setItem('selectedDates', JSON.stringify(selectedDates))
+  }, [selectedDates])
+
+  const addManualEntry = () => {
+    console.log('addManualEntry called with:', { manualDay, manualSubject, timetable })
+    
+    if (!manualSubject.trim()) {
+      alert('Please enter subject name.')
+      return
+    }
+    if (!manualDay) {
+      alert('Please select a day.')
+      return
+    }
+    
+    console.log('Checking for existing entry...')
+    const existingEntry = timetable.some(t => t.day === manualDay && t.subject.toLowerCase() === manualSubject.trim().toLowerCase())
+    console.log('Existing entry found:', existingEntry)
+    
+    if(existingEntry) {
+      alert('Entry already exists')
+      return
+    }
+    
+    const newEntry = { day: manualDay, subject: manualSubject.trim() }
+    console.log('Adding new entry:', newEntry)
+    
+    setTimetable(prev => {
+      const newTimetable = [...prev, newEntry]
+      console.log('New timetable:', newTimetable)
+      return newTimetable
+    })
+    
+    // Set today's date as default for the new subject
+    const today = new Date().toISOString().split('T')[0]
+    setSelectedDates(prev => ({
+      ...prev,
+      [manualSubject.trim()]: today
+    }))
+    
+    setManualSubject('')
+    setManualDay('')
+    setShowTimetable(true) // Show timetable after adding subject
+  }
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      addManualEntry()
     }
   }
 
-  const updateAttendance = (id, field, value) => {
-    setSubjects(subjects.map(subject => {
-      if (subject.id === id) {
-        const updated = { ...subject, [field]: Math.max(0, parseInt(value) || 0) }
-        // Ensure attended doesn't exceed total
-        if (field === 'attended' && updated.attended > updated.total) {
-          updated.total = updated.attended
-        }
-        return updated
-      }
-      return subject
-    }))
+  const removeTimetableEntry = (day, subject) => {
+    setTimetable(timetable.filter(t => !(t.day === day && t.subject === subject)))
   }
 
-  const markAttendance = (id, present) => {
-    setSubjects(subjects.map(subject => {
-      if (subject.id === id) {
-        return {
-          ...subject,
-          total: subject.total + 1,
-          attended: present ? subject.attended + 1 : subject.attended
-        }
-      }
-      return subject
-    }))
-  }
-
-  const removeSubject = (id) => {
-    setSubjects(subjects.filter(subject => subject.id !== id))
-  }
-
-  const calculateStats = (subject) => {
-    const percentage = subject.total > 0 ? (subject.attended / subject.total) * 100 : 0
-    const classesNeeded = Math.max(0, Math.ceil((targetAttendance * subject.total - 100 * subject.attended) / (100 - targetAttendance)))
-    const canSkip = percentage > targetAttendance ? 
-      Math.floor((100 * subject.attended - targetAttendance * subject.total) / targetAttendance) : 0
+  const addSession = (subject, date, type = 'scheduled') => {
+    console.log('addSession called:', { subject, date, type, currentSessions: sessions })
     
-    return { percentage, classesNeeded, canSkip }
-  }
-
-  const overallStats = () => {
-    const totalAttended = subjects.reduce((sum, s) => sum + s.attended, 0)
-    const totalClasses = subjects.reduce((sum, s) => sum + s.total, 0)
-    const overallPercentage = totalClasses > 0 ? (totalAttended / totalClasses) * 100 : 0
+    if (type === 'extra') {
+      setSessions(prev => {
+        const newSession = {
+          subject,
+          date,
+          status: 'extra',
+          attendance: null
+        }
+        console.log('Adding extra session:', newSession)
+        const newSessions = [...prev, newSession]
+        console.log('New sessions array:', newSessions)
+        return newSessions
+      })
+      return
+    }
     
-    return { totalAttended, totalClasses, overallPercentage }
+    if (sessions.some(s => s.subject === subject && s.date === date && s.status === 'scheduled')) {
+      alert('Scheduled class already exists for this subject and date')
+      return
+    }
+    
+    setSessions(prev => {
+      const newSession = {
+        subject,
+        date,
+        status: type,
+        attendance: null
+      }
+      console.log('Adding scheduled session:', newSession)
+      const newSessions = [...prev, newSession]
+      console.log('New sessions array:', newSessions)
+      return newSessions
+    })
   }
 
-  const stats = overallStats()
+  const markAttendance = (subject, date, status) => {
+    console.log('markAttendance called:', { subject, date, status, currentSessions: sessions })
+    setSessions(prev => {
+      const newSessions = prev.map(s => 
+        s.subject === subject && s.date === date 
+          ? {...s, attendance: status} 
+          : s
+      )
+      console.log('Updated sessions after markAttendance:', newSessions)
+      return newSessions
+    })
+  }
+
+  const calcStats = subject => {
+    const subjSessions = sessions.filter(s => s.subject === subject)
+    const totalSessions = subjSessions.length
+    const attended = subjSessions.filter(s => s.attendance === 'present').length
+    const absent = subjSessions.filter(s => s.attendance === 'absent').length
+    const extra = subjSessions.filter(s => s.status === 'extra').length
+    
+    if(totalSessions === 0) return { 
+      percentage: 0, 
+      attended: 0, 
+      total: 0, 
+      absent: 0,
+      extra: 0,
+      effectiveTotal: 0,
+      classesNeeded: 0 
+    }
+    
+    const effectiveTotal = totalSessions
+    const percentage = effectiveTotal > 0 ? (attended / effectiveTotal) * 100 : 0
+    const classesNeeded = effectiveTotal > 0 && percentage < targetAttendance 
+      ? Math.ceil((targetAttendance * effectiveTotal - 100 * attended) / (100 - targetAttendance))
+      : 0
+    
+    return { 
+      percentage, 
+      attended, 
+      total: totalSessions, 
+      absent,
+      extra,
+      effectiveTotal,
+      classesNeeded 
+    }
+  }
+
+  const subjects = [...new Set(timetable.map(t => t.subject))]
 
   return (
     <div className="attendance-container">
@@ -99,167 +187,207 @@ const Attendance = ({ onBack }) => {
         <button className="btn back-btn" onClick={onBack}>← Back to Home</button>
       </div>
 
-      {/* Overall Stats */}
-      <div className="overall-stats">
-        <div className="stat-card">
-          <h3>Overall Attendance</h3>
-          <div className="stat-value">
-            {stats.overallPercentage.toFixed(1)}%
-          </div>
-          <div className="stat-detail">
-            {stats.totalAttended} / {stats.totalClasses} classes
-          </div>
-        </div>
-        
-        <div className="stat-card">
-          <h3>Target</h3>
-          <div className="stat-value target-input">
-            <input
-              type="number"
-              min="0"
-              max="100"
-              value={targetAttendance}
-              onChange={(e) => setTargetAttendance(Math.min(100, Math.max(0, parseInt(e.target.value) || 0)))}
-              className="target-input-field"
-            />
-            <span>%</span>
-          </div>
-        </div>
-        
-        <div className={`stat-card ${stats.overallPercentage >= targetAttendance ? 'good' : 'warning'}`}>
-          <h3>Status</h3>
-          <div className="stat-value">
-            {stats.overallPercentage >= targetAttendance ? '✅' : '⚠️'}
-          </div>
-          <div className="stat-detail">
-            {stats.overallPercentage >= targetAttendance ? 'On Track' : 'Below Target'}
-          </div>
-        </div>
-      </div>
-
-      {/* Add Subject */}
-      <div className="add-subject-section">
-        <h3>Add New Subject</h3>
-        <div className="add-subject-form">
-          <input
-            type="text"
-            placeholder="Subject name"
-            value={newSubject}
-            onChange={(e) => setNewSubject(e.target.value)}
-            className="subject-input"
-            onKeyPress={(e) => e.key === 'Enter' && addSubject()}
+      <div className="upload-section">
+        <h3>Target Attendance Percentage</h3>
+        <div className="target-input">
+          <input 
+            type="number" 
+            min="0" 
+            max="100" 
+            value={targetAttendance} 
+            onChange={e => setTargetAttendance(parseInt(e.target.value) || 75)}
+            className="target-slider"
           />
-          <button onClick={addSubject} className="btn btn-add">Add Subject</button>
+          <span className="target-label">%</span>
         </div>
+
+        <h3>Add Subject to Timetable</h3>
+        <div className="manual-input">
+          <select value={manualDay} onChange={e => {
+            console.log('Day selected:', e.target.value)
+            setManualDay(e.target.value)
+          }}>
+            <option value="">Select a day</option>
+            {DAYS.slice(0,6).map(day => <option key={day} value={day}>{day}</option>)}
+          </select>
+          <input 
+            type="text" 
+            placeholder="Subject name (press Enter to add)" 
+            value={manualSubject} 
+            onChange={e => setManualSubject(e.target.value)}
+            onKeyPress={handleKeyPress}
+          />
+          <button className="btn btn-add" onClick={addManualEntry}>Add Subject</button>
+        </div>
+        
+        {manualDay && (
+          <p className="selected-day-info">Selected day: <strong>{manualDay}</strong></p>
+        )}
+
+        {timetable.length > 0 && (
+          <div className="timetable-display">
+            <div className="timetable-header">
+              <h4>Current Timetable</h4>
+              <button 
+                className="btn-toggle"
+                onClick={() => setShowTimetable(!showTimetable)}
+              >
+                {showTimetable ? 'Hide Timetable' : 'Show Timetable'}
+              </button>
+            </div>
+            {showTimetable && (
+              <div className="timetable-grid">
+                {DAYS.slice(0,6).map(day => {
+                  const daySubjects = timetable.filter(t => t.day === day)
+                  if (daySubjects.length === 0) return null
+                  return (
+                    <div key={day} className="day-column">
+                      <h5>{day}</h5>
+                      {daySubjects.map(subject => (
+                        <div key={subject.subject} className="timetable-item">
+                          <span>{subject.subject}</span>
+                          <button 
+                            className="btn-remove" 
+                            onClick={() => removeTimetableEntry(day, subject.subject)}
+                            title="Remove subject"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+        )}
+
+        {timetable.length > 0 && !showTimetable && (
+          <div className="timetable-toggle">
+            <button 
+              className="btn-toggle"
+              onClick={() => setShowTimetable(true)}
+            >
+              Show Timetable
+            </button>
+          </div>
+        )}
       </div>
 
-      {/* Subjects List */}
-      <div className="subjects-section">
-        <h3>Subjects</h3>
-        <div className="subjects-grid">
-          {subjects.map(subject => {
-            const subjectStats = calculateStats(subject)
+      <div className="subjects-grid">
+        {subjects.length === 0 
+          ? <p className="no-classes-text">No subjects added yet. Add subjects above to start tracking attendance.</p>
+          : subjects.map((subject, index) => {
+            const stat = calcStats(subject)
+            
             return (
-              <div key={subject.id} className="subject-card">
-                <div className="subject-header">
-                  <h4>{subject.name}</h4>
-                  <button 
-                    onClick={() => removeSubject(subject.id)}
-                    className="remove-btn"
-                    title="Remove subject"
-                  >
-                    ×
-                  </button>
-                </div>
+              <div key={subject} className="subject-card">
+                <h3 className="subject-title">{subject}</h3>
                 
-                <div className="attendance-display">
-                  <div className={`percentage ${subjectStats.percentage >= targetAttendance ? 'good' : 'warning'}`}>
-                    {subjectStats.percentage.toFixed(1)}%
-                  </div>
-                  <div className="attendance-fraction">
-                    {subject.attended} / {subject.total}
-                  </div>
+                <div className="stats-overview">
+                  <p className={`percentage ${stat.percentage >= targetAttendance ? 'good' : 'warning'}`}>
+                    Attendance: {stat.percentage.toFixed(1)}%
+                  </p>
+                  <p className="total-classes">Total Classes: {stat.total}</p>
                 </div>
 
-                <div className="attendance-inputs">
-                  <div className="input-group">
-                    <label>Attended</label>
-                    <input
-                      type="number"
-                      min="0"
-                      max={subject.total}
-                      value={subject.attended}
-                      onChange={(e) => updateAttendance(subject.id, 'attended', e.target.value)}
-                      className="attendance-input"
+                <div className="attendance-buttons-main">
+                  <h4>Mark Attendance</h4>
+                  
+                  <div className="date-selector">
+                    <label htmlFor={`date-${subject}`}>Select Date:</label>
+                    <input 
+                      type="date" 
+                      id={`date-${subject}`}
+                      className="date-picker"
+                      value={selectedDates[subject] || new Date().toISOString().split('T')[0]}
+                      onChange={(e) => {
+                        // Store the selected date for this subject
+                        setSelectedDates(prev => ({
+                          ...prev,
+                          [subject]: e.target.value
+                        }))
+                      }}
                     />
                   </div>
-                  <div className="input-group">
-                    <label>Total</label>
-                    <input
-                      type="number"
-                      min={subject.attended}
-                      value={subject.total}
-                      onChange={(e) => updateAttendance(subject.id, 'total', e.target.value)}
-                      className="attendance-input"
-                    />
+                  
+                  <div className="main-attendance-buttons">
+                    <button 
+                      className="btn-present"
+                      onClick={() => {
+                        const selectedDate = selectedDates[subject] || new Date().toISOString().split('T')[0]
+                        console.log('Present button clicked for:', subject, 'on date:', selectedDate)
+                        addSession(subject, selectedDate, 'scheduled')
+                        markAttendance(subject, selectedDate, 'present')
+                      }}
+                    >
+                      Present
+                    </button>
+                    <button 
+                      className="btn-absent"
+                      onClick={() => {
+                        const selectedDate = selectedDates[subject] || new Date().toISOString().split('T')[0]
+                        console.log('Absent button clicked for:', subject, 'on date:', selectedDate)
+                        addSession(subject, selectedDate, 'scheduled')
+                        markAttendance(subject, selectedDate, 'absent')
+                      }}
+                    >
+                      Absent
+                    </button>
+                    <button 
+                      className="btn-extra"
+                      onClick={() => {
+                        console.log('Extra Class button clicked for:', subject)
+                        setShowExtraOptions({...showExtraOptions, [subject]: !showExtraOptions[subject]})
+                      }}
+                    >
+                      Extra Class
+                    </button>
                   </div>
-                </div>
-
-                <div className="quick-actions">
-                  <button
-                    onClick={() => markAttendance(subject.id, true)}
-                    className="btn btn-present"
-                  >
-                    ✅ Present
-                  </button>
-                  <button
-                    onClick={() => markAttendance(subject.id, false)}
-                    className="btn btn-absent"
-                  >
-                    ❌ Absent
-                  </button>
-                </div>
-
-                <div className="attendance-advice">
-                  {subjectStats.percentage >= targetAttendance ? (
-                    <div className="advice good">
-                      {subjectStats.canSkip > 0 ? 
-                        `You can skip ${subjectStats.canSkip} classes` : 
-                        'Maintain current attendance'
-                      }
-                    </div>
-                  ) : (
-                    <div className="advice warning">
-                      Need {subjectStats.classesNeeded} more classes to reach {targetAttendance}%
+                  
+                  {showExtraOptions[subject] && (
+                    <div className="extra-options">
+                      <div className="extra-buttons">
+                        <button 
+                          className="btn-present-small"
+                          onClick={() => {
+                            const selectedDate = selectedDates[subject] || new Date().toISOString().split('T')[0]
+                            addSession(subject, selectedDate, 'extra')
+                            markAttendance(subject, selectedDate, 'present')
+                            setShowExtraOptions({...showExtraOptions, [subject]: false})
+                          }}
+                        >
+                          Present
+                        </button>
+                        <button 
+                          className="btn-absent-small"
+                          onClick={() => {
+                            const selectedDate = selectedDates[subject] || new Date().toISOString().split('T')[0]
+                            addSession(subject, selectedDate, 'extra')
+                            markAttendance(subject, selectedDate, 'absent')
+                            setShowExtraOptions({...showExtraOptions, [subject]: false})
+                          }}
+                        >
+                          Absent
+                        </button>
+                      </div>
                     </div>
                   )}
                 </div>
+
+                {stat.percentage < targetAttendance && stat.effectiveTotal > 0 && (
+                  <p className="need-attend">
+                    Need to attend {stat.classesNeeded} more {stat.classesNeeded === 1 ? 'class' : 'classes'} to reach {targetAttendance}%
+                  </p>
+                )}
               </div>
             )
-          })}
-        </div>
-      </div>
-
-      {/* Tips */}
-      <div className="tips-section">
-        <h3>Attendance Tips</h3>
-        <div className="tips-list">
-          <div className="tip">
-            <strong>📊 Track Daily:</strong> Mark attendance right after each class
-          </div>
-          <div className="tip">
-            <strong>🎯 Set Goals:</strong> Most colleges require 75% minimum attendance
-          </div>
-          <div className="tip">
-            <strong>⚡ Plan Ahead:</strong> Use predictions to plan when you can take breaks
-          </div>
-          <div className="tip">
-            <strong>📱 Stay Updated:</strong> Your data is saved locally in your browser
-          </div>
-        </div>
+          })
+        }
       </div>
     </div>
   )
 }
 
-export default Attendance
+export default AttendanceTracker

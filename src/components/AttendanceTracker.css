@@ -1,0 +1,733 @@
+:root {
+    --white: white;
+    --beige: #fbf9f1;
+    --accent: #f4b30c;
+    --black: black;
+    --brown: #1a1200;
+    --beige-footer: #ddd9c5;
+}
+
+body, html, #root {
+    margin: 0;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--beige);
+    color: var(--brown);
+}
+
+.attendance-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.attendance-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px #f4b30c;
+}
+
+.attendance-title {
+    margin: 0;
+    color: var(--brown);
+    font-size: 1.5rem;
+}
+
+.back-btn {
+    background: var(--brown);
+}
+
+.back-btn:hover {
+    background: #2a1a00;
+}
+
+.upload-section {
+    background: var(--white);
+    padding: 1.2rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px #f4b30c;
+}
+
+.upload-section h3 {
+    margin: 0 0 0.8rem 0;
+    color: var(--brown);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.target-input {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.target-slider {
+    width: 80px;
+    padding: 0.5rem;
+    border: 2px solid var(--accent);
+    border-radius: 6px;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.target-label {
+    font-weight: 600;
+    color: var(--brown);
+    font-size: 1rem;
+}
+
+.manual-input {
+    display: flex;
+    gap: 0.8rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.manual-input select,
+.manual-input input {
+    padding: 0.6rem;
+    border: 2px solid var(--beige-footer);
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.manual-input select {
+    min-width: 120px;
+}
+
+.manual-input input {
+    flex: 1;
+    min-width: 200px;
+}
+
+.btn {
+    padding: 0.6rem 1.2rem;
+    background: var(--accent);
+    color: var(--white);
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    background: #e0a800;
+    transform: translateY(-1px);
+}
+
+.timetable-display {
+    margin-top: 1.2rem;
+    padding: 1rem;
+    background: var(--beige);
+    border-radius: 8px;
+}
+
+.timetable-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.timetable-header h4 {
+    margin: 0;
+    color: var(--brown);
+    font-size: 1rem;
+}
+
+.timetable-toggle {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.timetable-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.day-column {
+    background: var(--beige);
+    padding: 0.8rem;
+    border-radius: 8px;
+    border-left: 3px solid var(--accent);
+}
+
+.day-column h5 {
+    margin: 0 0 0.5rem 0;
+    color: var(--brown);
+    font-size: 0.9rem;
+    text-align: center;
+    background: var(--accent);
+    color: var(--white);
+    padding: 0.4rem;
+    border-radius: 4px;
+}
+
+.timetable-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.4rem 0.6rem;
+    background: var(--white);
+    border-radius: 4px;
+    margin-bottom: 0.3rem;
+    font-size: 0.8rem;
+}
+
+.btn-remove {
+    background: #f44336;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-remove:hover {
+    background: #da190b;
+}
+
+.btn-add {
+    background: var(--accent);
+}
+
+.selected-day-info {
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    background: var(--beige);
+    border-radius: 6px;
+    text-align: center;
+    color: var(--brown);
+    font-size: 0.9rem;
+    border-left: 3px solid var(--accent);
+}
+
+.subjects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;
+}
+
+.subject-card {
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border-left: 5px solid var(--accent);
+    min-width: 0;
+}
+
+.subject-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.subject-title {
+    color: var(--brown);
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0 0 0.8rem 0;
+    padding-bottom: 0.6rem;
+    border-bottom: 2px solid var(--accent);
+}
+
+.stats-overview {
+    margin: 1.2rem 0;
+}
+
+.percentage {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0.8rem 0;
+    padding: 0.6rem 0.8rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.percentage.good {
+    background: var(--beige);
+    color: var(--brown);
+    border: 2px solid var(--accent);
+}
+
+.percentage.warning {
+    background: var(--beige-footer);
+    color: var(--brown);
+    border: 2px solid var(--accent);
+}
+
+.stats-details {
+    background: var(--beige);
+    padding: 0.6rem 0.8rem;
+    border-radius: 8px;
+    margin: 0.6rem 0;
+    font-weight: 500;
+    color: var(--brown);
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.total-classes {
+    background: var(--beige-footer);
+    padding: 0.6rem 0.8rem;
+    border-radius: 8px;
+    margin: 0.6rem 0;
+    font-weight: 600;
+    color: var(--brown);
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.attendance-buttons-main {
+    margin: 1rem 0;
+    padding: 1rem;
+    background: var(--beige);
+    border-radius: 12px;
+    border-left: 4px solid var(--accent);
+}
+
+.attendance-buttons-main h4 {
+    margin: 0 0 0.8rem 0;
+    color: var(--brown);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.date-selector {
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.date-selector label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--brown);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.date-picker {
+    padding: 0.5rem;
+    border: 2px solid var(--accent);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    background: var(--white);
+    color: var(--brown);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.date-picker:focus {
+    outline: none;
+    border-color: var(--brown);
+    box-shadow: 0 0 0 2px rgba(244, 179, 12, 0.3);
+}
+
+.date-picker:hover {
+    border-color: var(--brown);
+}
+
+.main-attendance-buttons {
+    display: flex;
+    gap: 0.8rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.main-attendance-buttons .btn-present,
+.main-attendance-buttons .btn-absent,
+.main-attendance-buttons .btn-extra {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    min-width: 100px;
+}
+
+.extra-options {
+    margin-top: 1rem;
+    padding: 0.8rem;
+    background: var(--white);
+    border-radius: 8px;
+    border: 2px solid var(--accent);
+}
+
+.extra-date {
+    margin: 0 0 0.8rem 0;
+    text-align: center;
+    font-weight: 600;
+    color: var(--brown);
+    font-size: 0.9rem;
+}
+
+.extra-buttons {
+    display: flex;
+    gap: 0.8rem;
+    justify-content: center;
+}
+
+.btn-present-small,
+.btn-absent-small {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    min-width: 80px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-present-small {
+    background: #4CAF50;
+    color: white;
+}
+
+.btn-present-small:hover {
+    background: #45a049;
+    transform: translateY(-1px);
+}
+
+.btn-absent-small {
+    background: #f44336;
+    color: white;
+}
+
+.btn-absent-small:hover {
+    background: #da190b;
+    transform: translateY(-1px);
+}
+
+.session-management {
+    margin: 1.5rem 0;
+    padding: 1.2rem;
+    background: var(--beige);
+    border-radius: 12px;
+    border-left: 4px solid var(--accent);
+}
+
+.session-management h4 {
+    margin: 0 0 0.8rem 0;
+    color: var(--brown);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.add-session-controls {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 0.8rem;
+}
+
+.date-input {
+    padding: 0.6rem;
+    border: 2px solid var(--beige-footer);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    background: var(--white);
+    transition: all 0.3s ease;
+    flex: 1;
+    min-width: 120px;
+}
+
+.date-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(244, 179, 12, 0.2);
+}
+
+.extra-class-info {
+    margin: 0;
+    color: var(--brown);
+    font-size: 0.8rem;
+    opacity: 0.8;
+    text-align: center;
+    font-style: italic;
+}
+
+.session-controls {
+    margin: 1.2rem 0;
+}
+
+.session-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+}
+
+.session-header h4 {
+    margin: 0;
+    color: var(--brown);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.btn-toggle {
+    padding: 0.4rem 0.8rem;
+    background: var(--accent);
+    color: var(--white);
+    border: none;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-toggle:hover {
+    background: #e0a800;
+}
+
+.no-sessions {
+    text-align: center;
+    color: var(--brown);
+    font-style: italic;
+    padding: 1.2rem;
+    background: var(--beige);
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.session-control {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 0.8rem;
+    padding: 0.8rem;
+    background: var(--beige);
+    border-radius: 10px;
+    flex-wrap: wrap;
+}
+
+.session-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 100px;
+}
+
+.session-date {
+    font-weight: 600;
+    color: var(--brown);
+    font-size: 0.85rem;
+}
+
+.session-type {
+    font-size: 0.75rem;
+    color: var(--brown);
+    font-style: italic;
+    opacity: 0.8;
+}
+
+.attendance-buttons {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+}
+
+.btn-present,
+.btn-absent,
+.btn-extra {
+    padding: 0.4rem 0.8rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.btn-present {
+    background: var(--accent);
+    color: var(--brown);
+}
+
+.btn-present:hover {
+    background: #e6a800;
+    transform: translateY(-1px);
+}
+
+.btn-present.active {
+    background: var(--brown);
+    color: var(--white);
+    box-shadow: 0 2px 8px rgba(26, 18, 0, 0.3);
+}
+
+.btn-absent {
+    background: var(--brown);
+    color: var(--white);
+}
+
+.btn-absent:hover {
+    background: var(--black);
+    transform: translateY(-1px);
+}
+
+.btn-absent.active {
+    background: var(--black);
+    color: var(--white);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.btn-extra {
+    background: var(--accent);
+    color: var(--brown);
+}
+
+.btn-extra:hover {
+    background: #e6a800;
+    transform: translateY(-1px);
+}
+
+.btn-extra.active {
+    background: var(--brown);
+    color: var(--white);
+    box-shadow: 0 2px 8px rgba(26, 18, 0, 0.3);
+}
+
+.btn-remove-session {
+    background: var(--brown);
+    color: var(--white);
+    border: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.btn-remove-session:hover {
+    background: var(--black);
+    transform: scale(1.1);
+}
+
+.need-attend {
+    margin: 1rem 0 0 0;
+    padding: 0.8rem;
+    background: var(--beige);
+    border-radius: 8px;
+    text-align: center;
+    color: var(--brown);
+    font-weight: 600;
+    font-size: 0.9rem;
+    border-left: 3px solid var(--accent);
+}
+
+.no-classes-text {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--brown);
+    font-size: 1rem;
+    padding: 2rem;
+    background: var(--beige);
+    border-radius: 12px;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .subjects-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .subjects-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .manual-input {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .manual-input select,
+    .manual-input input {
+        min-width: auto;
+    }
+    
+    .timetable-grid {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .attendance-container {
+        padding: 1rem;
+        margin: 1rem;
+    }
+    
+    .attendance-header {
+        padding: 0.8rem;
+    }
+    
+    .upload-section {
+        padding: 1.2rem;
+    }
+    
+    .subject-card {
+        padding: 1.2rem;
+    }
+    
+    .btn-present,
+    .btn-absent,
+    .btn-extra {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.75rem;
+    }
+    
+    .target-input {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .target-slider {
+        width: 100%;
+    }
+    
+    .session-control {
+        padding: 0.6rem;
+    }
+}
+
+/* Focus and accessibility improvements */
+.btn:focus,
+.manual-input select:focus,
+.manual-input input[type="text"]:focus,
+.target-slider:focus,
+.date-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(244, 179, 12, 0.3);
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}

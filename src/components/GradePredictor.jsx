@@ -2,56 +2,77 @@ import React, { useState, useMemo } from 'react'
 import './GradePredictor.css'
 
 const GradePredictor = ({ onBack }) => {
-  const [cie1, setCie1] = useState(0) // Out of 20
-  const [cie2, setCie2] = useState(0) // Out of 30
+  const [focusedInput, setFocusedInput] = useState(null);
+  const [cie1, setCie1] = useState(0) // Out of 30
+  const [cie2, setCie2] = useState(0) // Out of 20
   const [cie3, setCie3] = useState(0) // Out of 30
   
   // Grade bands as specified
   const gradeBands = [
-    { grade: 'S', min: 90, max: 100, color: '#059669' },
-    { grade: 'A', min: 75, max: 89, color: '#0891b2' },
-    { grade: 'B', min: 66, max: 74, color: '#7c3aed' },
-    { grade: 'C', min: 56, max: 65, color: '#dc2626' },
-    { grade: 'D', min: 50, max: 55, color: '#ea580c' },
-    { grade: 'E', min: 45, max: 49, color: '#ca8a04' },
-    { grade: 'F', min: 0, max: 45, color: '#6b7280' }
+    { grade: 'S', min: 90, max: 100, color:'#f4b30c' },
+    { grade: 'A', min: 75, max: 89, color: '#f4b30c' },
+    { grade: 'B', min: 66, max: 74, color: '#f4b30c' },
+    { grade: 'C', min: 56, max: 65, color: '#f4b30c' },
+    { grade: 'D', min: 50, max: 55, color: '#f4b30c' },
+    { grade: 'E', min: 45, max: 49, color: '#f4b30c' },
+    { grade: 'F', min: 0, max: 45, color:  '#f4b30c' }
   ]
 
-  const calculations = useMemo(() => {
-    // Total CIE: 20 + 30 + 30 = 80, but reduced to 40
-    const totalCie = (cie1 + cie2 + cie3) * (40 / 80) // Scale to 40
-    
-    const results = gradeBands.map(band => {
-      // Total needed = CIE (40) + SEE (60) = 100
-      // So SEE needed = (band.min - totalCie) * (60/60) = band.min - totalCie
-      const seeNeeded = Math.max(0, band.min - totalCie)
-      const seeNeededOutOf100 = (seeNeeded / 60) * 100 // Convert to percentage of 100
-      
-      return {
-        ...band,
-        seeNeeded: Math.min(60, Math.max(0, seeNeeded)),
-        seeNeededOutOf100: Math.min(100, Math.max(0, seeNeededOutOf100)),
-        achievable: seeNeeded <= 60
-      }
-    })
-    
-    return { totalCie, results }
-  }, [cie1, cie2, cie3])
+    const CIE_MIN = 21;
+    const SEE_MIN = 24;
 
-  const currentGrade = useMemo(() => {
-    const maxPossibleTotal = calculations.totalCie + 60 // If student gets full SEE
-    for (const band of gradeBands) {
-      if (maxPossibleTotal >= band.min) {
-        return band.grade
+    const calculations = useMemo(() => {
+      const totalCie = (cie1 + cie2 + cie3) * (40 / 80); // CIE scaled out of 40
+      const cieFail = totalCie < CIE_MIN;
+
+      const results = gradeBands.map(band => {
+        const seeNeeded = Math.max(0, band.min - totalCie);
+        // Enforce minimum SEE required as 24 out of 60 (per rules)
+        const minSeeRequired = Math.max(seeNeeded, SEE_MIN);
+
+        const seeNeededOutOf100 = (minSeeRequired / 60) * 100;
+
+        // Fail if CIE or required SEE is below minimum
+        const fail = cieFail || minSeeRequired < SEE_MIN;
+
+        return {
+          ...band,
+          seeNeeded: Math.min(60, minSeeRequired),
+          seeNeededOutOf100: Math.min(100, seeNeededOutOf100),
+          achievable: !fail && minSeeRequired <= 60,
+          fail
+        };
+      });
+
+      return { totalCie, cieFail, results };
+    }, [cie1, cie2, cie3]);
+
+    const currentGrade = useMemo(() => {
+      if (calculations.cieFail) return 'F';
+      // Also check if SEE minimum is violated overall
+      for (const band of gradeBands) {
+        if (calculations.totalCie + 60 >= band.min) {
+          return band.grade;
+        }
+      }
+      return 'F';
+    }, [calculations, gradeBands]);
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      // Focus next input or submit
+      const inputs = ['cie1', 'cie2', 'cie3'];
+      const currentIndex = inputs.indexOf(focusedInput);
+      if (currentIndex < inputs.length - 1) {
+        document.getElementById(inputs[currentIndex + 1])?.focus();
       }
     }
-    return 'F'
-  }, [calculations.totalCie, gradeBands])
+  }
 
   return (
     <div className="grade-predictor-container">
       <div className="grade-header">
-        <h2 className="grade-title">📊 Grade Predictor</h2>
+        <h2 className="grade-title">📊 GradeGenie</h2>
         <button className="btn back-btn" onClick={onBack}>← Back to Home</button>
       </div>
 
@@ -66,9 +87,13 @@ const GradePredictor = ({ onBack }) => {
                 type="number"
                 min="0"
                 max="30"
-                value={cie1}
+                value={focusedInput === 'cie1' && cie1 === 0 ? '' : cie1}
+                onFocus={() => setFocusedInput('cie1')}
+                onBlur={() => setFocusedInput(null)}
                 onChange={(e) => setCie1(Math.min(30, Math.max(0, Number(e.target.value))))}
+                onKeyPress={handleKeyPress}
                 className="grade-input"
+                placeholder="0-30"
               />
             </div>
             
@@ -78,9 +103,13 @@ const GradePredictor = ({ onBack }) => {
                 type="number"
                 min="0"
                 max="20"
-                value={cie2}
+                value={focusedInput === 'cie2' && cie2 === 0 ? '' : cie2}
+                onFocus={() => setFocusedInput('cie2')}
+                onBlur={() => setFocusedInput(null)}
                 onChange={(e) => setCie2(Math.min(20, Math.max(0, Number(e.target.value))))}
+                onKeyPress={handleKeyPress}
                 className="grade-input"
+                placeholder="0-20"
               />
             </div>
             
@@ -90,9 +119,13 @@ const GradePredictor = ({ onBack }) => {
                 type="number"
                 min="0"
                 max="30"
-                value={cie3}
+                value={focusedInput === 'cie3' && cie3 === 0 ? '' : cie3}
+                onFocus={() => setFocusedInput('cie3')}
+                onBlur={() => setFocusedInput(null)}
                 onChange={(e) => setCie3(Math.min(30, Math.max(0, Number(e.target.value))))}
+                onKeyPress={handleKeyPress}
                 className="grade-input"
+                placeholder="0-30"
               />
             </div>
           </div>
@@ -128,7 +161,11 @@ const GradePredictor = ({ onBack }) => {
                     ({result.min}-{result.max}%)
                   </span>
                 </div>
-                
+                {result.fail && (
+                  <div className="not-achievable-note" style={{ color: '#dc2626', fontWeight: '700' }}>
+                    ❌ Fail: CIE below minimum required (21/40)
+                  </div>
+                )}
                 <div className="grade-details">
                  <div className="see-requirement">
                   <strong>SEE Required:</strong>
@@ -145,7 +182,6 @@ const GradePredictor = ({ onBack }) => {
                   
                   {!result.achievable && (
                     <div className="not-achievable-note">
-                      ❌ Not achievable with current CIE
                     </div>
                   )}
                   
