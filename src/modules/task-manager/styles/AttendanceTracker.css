@@ -33,6 +33,12 @@ body, html, #root {
     box-shadow: 0 2px 8px #f4b30c;
 }
 
+.header-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
 .attendance-title {
     margin: 0;
     color: var(--brown);
@@ -45,6 +51,24 @@ body, html, #root {
 
 .back-btn:hover {
     background: #2a1a00;
+}
+
+.undo-btn {
+    background: var(--accent);
+    color: var(--white);
+    font-weight: 600;
+    animation: pulse 2s infinite;
+}
+
+.undo-btn:hover {
+    background: #e6a500;
+    transform: scale(1.05);
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(244, 179, 12, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(244, 179, 12, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(244, 179, 12, 0); }
 }
 
 .upload-section {
@@ -406,6 +430,21 @@ body, html, #root {
     flex-wrap: wrap;
 }
 
+.extra-collapsible {
+  margin-top: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+  border-top: 1px dashed #ccc;
+  padding-top: 10px;
+}
+
+.extra-session-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
 .main-attendance-buttons .btn-present,
 .main-attendance-buttons .btn-absent,
 .main-attendance-buttons .btn-extra {
@@ -467,6 +506,96 @@ body, html, #root {
 .btn-absent-small:hover {
     background: #da190b;
     transform: translateY(-1px);
+}
+
+.btn-close-extra {
+    background: #6c757d;
+    color: white;
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    min-width: 80px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-close-extra:hover {
+    background: #5a6268;
+    transform: translateY(-1px);
+}
+
+/* Extra Class History Styles */
+.extra-history {
+    margin-top: 1rem;
+    padding: 0.8rem;
+    background: rgba(244, 179, 12, 0.05);
+    border-radius: 8px;
+    border-left: 3px solid var(--accent);
+}
+
+.extra-history h5 {
+    margin: 0 0 0.5rem 0;
+    color: var(--brown);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.extra-sessions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.extra-session-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.4rem 0.6rem;
+    background: var(--white);
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+    font-size: 0.8rem;
+}
+
+.extra-date {
+    color: var(--brown);
+    font-weight: 500;
+    flex: 1;
+}
+
+.extra-status {
+    margin: 0 0.5rem;
+    font-weight: 600;
+}
+
+.extra-status.present {
+    color: #28a745;
+}
+
+.extra-status.absent {
+    color: #dc3545;
+}
+
+.extra-status.null {
+    color: #6c757d;
+}
+
+.btn-remove-extra {
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.2rem 0.4rem;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-remove-extra:hover {
+    background: #c82333;
+    transform: scale(1.1);
 }
 
 .session-management {
