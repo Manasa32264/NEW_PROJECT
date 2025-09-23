@@ -1,0 +1,72 @@
+/* General Page */
+.eduboat-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;   /* Keep content aligned from top */
+  align-items: center;
+  background-color: #fbf9f1;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  padding: 20px 10px;
+}
+
+/* Header */
+.header h1 {
+  font-size: 2.2rem;
+  margin-bottom: 4px;  /* reduced */
+  color: #222;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 20px; /* reduced */
+}
+
+/* Card Section */
+.card-section {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin: 10px 0 15px 0; /* reduced top/bottom margin */
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 18px;
+  width: 300px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+}
+
+.card h3 a {
+  text-decoration: none;
+  font-size: 1.1rem;
+  color: white;
+}
+
+.card p {
+  margin-top: 8px;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+/* Footer */
+.footer {
+  margin-top: 70px;   /* reduced */
+  font-weight: bold;
+  font-size: 1rem;
+  color: #444;
+  background: #f1e8d5;
+  padding: 8px 16px;
+  border-radius: 8px;
+  width: 100%;
+}
