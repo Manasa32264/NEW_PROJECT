@@ -1,33 +1,62 @@
+/**
+ * GradeGenie - Grade Prediction Component
+ * 
+ * This component provides a comprehensive grade prediction tool that:
+ * - Calculates grades based on CIE (Continuous Internal Evaluation) marks
+ * - Predicts required SEE (Semester End Examination) marks for different grade bands
+ * - Displays grade bands from S to F with color-coded visualization
+ * - Enforces minimum CIE and SEE requirements as per academic rules
+ * 
+ * Features:
+ * - Real-time calculation as user inputs marks
+ * - Interactive grade band visualization
+ * - Minimum requirement validation
+ * - Responsive design with modern UI
+ */
+
 import React, { useState, useMemo } from 'react'
-import './GradePredictor.css'
+import '../styles/GradePredictor.css'
 
 const GradePredictor = ({ onBack }) => {
+  // State for managing input focus and CIE marks
   const [focusedInput, setFocusedInput] = useState(null);
-  const [cie1, setCie1] = useState(0) // Out of 30
-  const [cie2, setCie2] = useState(0) // Out of 20
-  const [cie3, setCie3] = useState(0) // Out of 30
+  const [cie1, setCie1] = useState(0) // CIE 1 marks (out of 30)
+  const [cie2, setCie2] = useState(0) // CIE 2 marks (out of 20)
+  const [cie3, setCie3] = useState(0) // CIE 3 marks (out of 30)
   
-  // Grade bands as specified
+  // Grade bands configuration - defines the grading system from S to F
   const gradeBands = [
-    { grade: 'S', min: 90, max: 100, color:'#f4b30c' },
-    { grade: 'A', min: 75, max: 89, color: '#f4b30c' },
-    { grade: 'B', min: 66, max: 74, color: '#f4b30c' },
-    { grade: 'C', min: 56, max: 65, color: '#f4b30c' },
-    { grade: 'D', min: 50, max: 55, color: '#f4b30c' },
-    { grade: 'E', min: 45, max: 49, color: '#f4b30c' },
-    { grade: 'F', min: 0, max: 45, color:  '#f4b30c' }
+    { grade: 'S', min: 90, max: 100, color:'#f4b30c' }, // Outstanding
+    { grade: 'A', min: 75, max: 89, color: '#f4b30c' },  // Excellent
+    { grade: 'B', min: 66, max: 74, color: '#f4b30c' },  // Good
+    { grade: 'C', min: 56, max: 65, color: '#f4b30c' },  // Average
+    { grade: 'D', min: 50, max: 55, color: '#f4b30c' },  // Below Average
+    { grade: 'E', min: 45, max: 49, color: '#f4b30c' },  // Poor
+    { grade: 'F', min: 0, max: 45, color:  '#f4b30c' }   // Fail
   ]
 
-    const CIE_MIN = 21;
-    const SEE_MIN = 24;
+    // Minimum requirements as per academic rules
+    const CIE_MIN = 21; // Minimum CIE marks required (out of 40)
+    const SEE_MIN = 24; // Minimum SEE marks required (out of 60)
 
+    /**
+     * Grade Calculations
+     * 
+     * This useMemo hook calculates:
+     * - Total CIE marks scaled to 40 points
+     * - Required SEE marks for each grade band
+     * - Whether each grade is achievable based on current CIE marks
+     * - Validation against minimum requirements
+     */
     const calculations = useMemo(() => {
+      // Calculate total CIE marks scaled to 40 points (CIE is 40% of total)
       const totalCie = (cie1 + cie2 + cie3) * (40 / 80); // CIE scaled out of 40
-      const cieFail = totalCie < CIE_MIN;
+      const cieFail = totalCie < CIE_MIN; // Check if CIE marks are below minimum
 
+      // Calculate required SEE marks for each grade band
       const results = gradeBands.map(band => {
         const seeNeeded = Math.max(0, band.min - totalCie);
-        // Enforce minimum SEE required as 24 out of 60 (per rules)
+        // Enforce minimum SEE required as 24 out of 60 (per academic rules)
         const minSeeRequired = Math.max(seeNeeded, SEE_MIN);
 
         const seeNeededOutOf100 = (minSeeRequired / 60) * 100;
@@ -47,6 +76,12 @@ const GradePredictor = ({ onBack }) => {
       return { totalCie, cieFail, results };
     }, [cie1, cie2, cie3]);
 
+    /**
+     * Current Grade Calculation
+     * 
+     * Determines the current achievable grade based on CIE marks
+     * Returns 'F' if CIE marks are below minimum requirement
+     */
     const currentGrade = useMemo(() => {
       if (calculations.cieFail) return 'F';
       // Also check if SEE minimum is violated overall

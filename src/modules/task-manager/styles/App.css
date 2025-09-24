@@ -204,6 +204,10 @@ html {
   animation-delay: 0.6s;
 }
 
+.cute-tab:nth-child(4) {
+  animation-delay: 0.8s;
+}
+
 .cute-tab::before {
   content: '';
   position: absolute;
@@ -291,6 +295,13 @@ html {
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
   animation: iconPulse 2s ease-in-out infinite 1s;
   text-shadow: 0 2px 4px rgba(168, 237, 234, 0.3);
+}
+
+.tab-icon.contact-icon {
+  color: #9b59b6;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+  animation: iconPulse 2s ease-in-out infinite 1.2s;
+  text-shadow: 0 2px 4px rgba(155, 89, 182, 0.3);
 }
 
 @keyframes iconPulse {
