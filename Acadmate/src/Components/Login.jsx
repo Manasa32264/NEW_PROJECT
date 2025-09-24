@@ -1,164 +1,131 @@
 import React, { useState } from 'react';
-import './Login.css';
-
-const Login = ({ onLogin }) => {
+import './Registration.css'
+// The onRegister prop is a function that would handle the registration logic,
+// for example, sending the data to a server.
+const Registration = ({ onRegister }) => {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
-    usn: '',
-    branch: '',
-    section: '',
-    email: '',
-    phone: ''
+    confirmPassword: '',
   });
 
-  const branches = ['Biotechnology','Civil Engineering','Construction Technology and Management',
-    'Computer Science and Engineering','Computer Science and Engineering(AI & ML)',
-    'Computer Science and Business System','Electronics and Communication Engineering',
-    'Information Science and Engineering','Mechanical Engineering','Bachelor of Computer Applications',
-    'Bachelor of Business Administration','other'
-  ];
+  const [error, setError] = useState('');
+
+  // --- Password Validation Helper Function ---
+  const validatePassword = (password) => {
+    // Rule: At least 8 characters
+    if (password.length < 8) {
+      return 'Password must be at least 8 characters long.';
+    }
+    // Rule: Contains at least one number
+    if (!/\d/.test(password)) {
+      return 'Password must contain at least one number.';
+    }
+    // Rule: Contains at least one lowercase letter
+    if (!/[a-z]/.test(password)) {
+      return 'Password must contain at least one lowercase letter.';
+    }
+    // Rule: Contains at least one uppercase letter
+    if (!/[A-Z]/.test(password)) {
+      return 'Password must contain at least one uppercase letter.';
+    }
+    // Rule: Contains at least one special character
+    if (!/[!@#$%^&*]/.test(password)) {
+      return 'Password must contain a special character (e.g., !@#$%).';
+    }
+    // If all rules pass, return null (no error)
+    return null;
+  };
+
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
+    // Clear error message when user starts typing
+    if (error) {
+      setError('');
+    }
   };
 
-
   const handleSubmit = (e) => {
-  e.preventDefault();
+    e.preventDefault();
+    setError(''); // Clear previous errors
 
-  // Regex to match 10 digits OR 12 digits starting with 91
-  const phoneRegex = /^(91)?[0-9]{10}$/;
+    // 1. Check for empty fields
+    if (!formData.username.trim() || !formData.password.trim() || !formData.confirmPassword.trim()) {
+      setError('Please fill in all fields.');
+      return;
+    }
+    
+    // 2. Validate Password Strength
+    const passwordError = validatePassword(formData.password);
+    if (passwordError) {
+        setError(passwordError);
+        return;
+    }
 
-  if (!phoneRegex.test(formData.phone)) {
-    alert('Please enter a valid 10-digit or 12-digit phone number (starting with 91).');
-    return; // Stop the submission if the phone number is invalid
-  }
+    // 3. Check if passwords match
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match. Please try again.');
+      return;
+    }
 
-  // Basic validation for other fields
-  if (Object.values(formData).some(value => value.trim() === '')) {
-    alert('Please fill in all fields');
-    return;
-  }
-  
-  onLogin(formData);
-};
+    // If all validation passes, call the onRegister prop
+    onRegister({ username: formData.username, password: formData.password });
+    alert('Registration successful!'); // Placeholder for success feedback
+  };
 
   return (
-    <div className="login-container">
-      <div className="login-box">
-        <div className="login-header">
-          <h1>Student Portal</h1>
-         
+    <>
+      <div className="registration-container">
+        <div className="registration-box">
+          <div className="registration-header">
+            <h1>Create Account</h1>
+          </div>
+          
+          <form className="registration-form" onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="username">Username</label>
+              <input
+                id="username" type="text" name="username"
+                value={formData.username} onChange={handleChange}
+                placeholder="Enter a username" required
+              />
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="password">Password</label>
+              <input
+                id="password" type="password" name="password"
+                value={formData.password} onChange={handleChange}
+                placeholder="Create a strong password"
+                // This pattern provides instant browser-side validation feedback
+                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}"
+                title="Password must be at least 8 characters long and contain at least one number, one uppercase letter, one lowercase letter, and one special character."
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="confirmPassword">Confirm Password</label>
+              <input
+                id="confirmPassword" type="password" name="confirmPassword"
+                value={formData.confirmPassword} onChange={handleChange}
+                placeholder="Confirm your password" required
+              />
+            </div>
+
+            <button type="submit" className="registration-btn">Register</button>
+            
+            {error && <div className="error-message">{error}</div>}
+          </form>
         </div>
-        
-        <form className="login-form" onSubmit={handleSubmit}>
-          <div className="form-row">
-            <div className="form-group">
-              <label>Username</label>
-              <input
-                type="text"
-                name="username"
-                value={formData.username}
-                onChange={handleChange}
-                placeholder="Enter your username"
-                required
-              />
-            </div>
-            
-            <div className="form-group">
-              <label>Password</label>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="Enter your password"
-                required
-              />
-            </div>
-          </div>
-
-          <div className="form-row">
-            <div className="form-group">
-              <label>USN</label>
-              <input
-                type="text"
-                name="usn"
-                value={formData.usn}
-                onChange={handleChange}
-                placeholder="University Seat Number"
-                required
-              />
-            </div>
-            
-            <div className="form-group">
-              <label>Branch</label>
-              <select
-                name="branch"
-                value={formData.branch}
-                onChange={handleChange}
-                required
-              >
-                <option value="">Select Branch</option>
-                {branches.map(branch => (
-                  <option key={branch} value={branch}>{branch}</option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          <div className="form-row">
-            <div className="form-group">
-              <label>Section</label>
-              <input
-                type="text"
-                name="section"
-                value={formData.section}
-                onChange={handleChange}
-                placeholder="Section (e.g., A, B, C)"
-                required
-              />
-            </div>
-            
-            <div className="form-group">
-              <label>Email ID</label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="your.email@gmail.com"
-                required
-              />
-            </div>
-          </div>
-
-
-          <div className="form-group full-width">
-  <label>Phone Number</label>
-  <input
-    type="tel"
-    name="phone"
-    value={formData.phone}
-    onChange={handleChange}
-    placeholder="10-digit or 12-digit (with 91) number"
-    required
-    pattern="^(91)?[0-9]{10}$" // ✅ Add this for instant validation
-    title="Please enter a valid 10 or 12-digit number" // ✅ Add this for a helpful message
-  />
-</div>
-
-          <button type="submit" className="btn btn-primary login-btn">
-            Login to Portal
-          </button>
-        </form>
       </div>
-    </div>
+    </>
   );
 };
 
-export default Login;
+export default Registration;
+
