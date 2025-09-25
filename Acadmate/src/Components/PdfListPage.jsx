@@ -59,7 +59,7 @@ const PdfListPage = ({ user, onLogout }) => {
                 <a
                   key={pdf.url}
                   href={pdf.url}
-                  target="_blank"
+                  target="_self"
                   rel="noopener noreferrer"
                   className="pdf-list-item"
                 >
