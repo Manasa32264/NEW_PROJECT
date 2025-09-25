@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Registration.css'
+import './Login.css'
 // The onRegister prop is a function that would handle the registration logic,
 // for example, sending the data to a server.
 const Registration = ({ onRegister }) => {

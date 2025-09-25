@@ -1,6 +1,6 @@
 
 // A single sample PDF for demonstration purposes.
-const samplePdfUrl = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf';
+const samplePdfUrl = 'https://drive.google.com/file/d/1MCHK2uif5hiptlESsN6Ta6XQvYY3tEuS/view?usp=sharing';
 
 export const data = {
   physics: {
@@ -9,7 +9,7 @@ export const data = {
       { 
         id: 'maths_1', name: 'Engineering Mathematics', icon: '📐',
         textbook: [
-          { id: 'maths_tb_1', title: 'Mathematics 1', url: samplePdfUrl },
+          { id: 'maths_tb_1', title: 'Mathematics 1', url:samplePdfUrl },
           { id: 'maths_tb_2', title: 'Mathematics 2', url: samplePdfUrl },
         ],
         notes: [

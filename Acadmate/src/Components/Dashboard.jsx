@@ -66,7 +66,7 @@ const Dashboard = ({ user, onLogout }) => {
                     // --- THIS IS THE UPDATED NAVIGATION LOGIC ---
                     if (material.id === 'syllabus') {
                       // Syllabus link now goes directly to the viewer with a unique path
-                      linkTo = `/view/syllabus/${cycle.id}/syllabus/main`;
+                      linkTo = `https://drive.google.com/file/d/1MCHK2uif5hiptlESsN6Ta6XQvYY3tEuS/view?usp=sharing`;
                     } else if (material.id === 'pyqs') {
                       // PYQs link now goes directly to the PDF list page, skipping subject selection
                       linkTo = `/pdfs/${cycle.id}/pyqs/all`;

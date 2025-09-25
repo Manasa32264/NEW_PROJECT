@@ -13,7 +13,7 @@ const PdfViewer = ({ user, onLogout }) => {
   
   // This logic now correctly handles a direct syllabus link or a document link
   const pdfToView = type === 'syllabus' 
-    ? { title: `${cycle.charAt(0).toUpperCase() + cycle.slice(1)} Syllabus`, url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf' }
+    ? { title: `${cycle.charAt(0).toUpperCase() + cycle.slice(1)} Syllabus`, url: 'https://drive.google.com/file/d/1MCHK2uif5hiptlESsN6Ta6XQvYY3tEuS/view?usp=sharing' }
     : pdf;
 
   if (!pdfToView) {
