@@ -18,9 +18,10 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import '../styles/AttendanceTracker.css';
 
 const AttendanceTracker = ({ onBack }) => {
+  // AttendanceTracker CSS styles
+   b
   // State management for attendance tracking
   const [timetable, setTimetable] = useState([]); // Scheduled classes timetable
   const [sessions, setSessions] = useState([]); // Attendance sessions/records
@@ -138,14 +139,18 @@ const AttendanceTracker = ({ onBack }) => {
   const subjects = [...new Set(timetable.map(t => t.subject))];
 
   return (
-    <div className="attendance-container">
-      <div className="attendance-header">
-        <h2 className="attendance-title">📋 Attendance Tracker</h2>
-        <div className="header-actions">
-          {showUndo && <button className="btn undo-btn" onClick={undoLastAction}>↶ Undo Last Action</button>}
-          <button className="btn back-btn" onClick={onBack}>← Back to Home</button>
+    <>
+      {/* AttendanceTracker CSS styles */}
+      <style dangerouslySetInnerHTML={{ __html: attendanceTrackerStyles }} />
+      
+      <div className="attendance-container">
+        <div className="attendance-header">
+          <h2 className="attendance-title">📋 Attendance Tracker</h2>
+          <div className="header-actions">
+            {showUndo && <button className="btn undo-btn" onClick={undoLastAction}>↶ Undo Last Action</button>}
+            <button className="btn back-btn" onClick={onBack}>← Back to Home</button>
+          </div>
         </div>
-      </div>
 
       <div className="upload-section">
         <h3>Target Attendance Percentage</h3>
@@ -283,13 +288,14 @@ const AttendanceTracker = ({ onBack }) => {
                     <button className="btn-close-extra" onClick={()=>setShowExtraOptions({...showExtraOptions,[subject]:false})}>✕ Close</button>
                   </div>
                 )}
-
+h
               </div>
             </div>
           );
         })}
       </div>
     </div>
+    </>
   );
 };
 
